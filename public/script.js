@@ -107,17 +107,12 @@ function ready(error, world, countryData) {
     }
     // start chart 
     var tabulate = function (data, columns) {
-      cleanChartDiv()
+      cleanChartDiv();
       var table = d3.select('#my_chart')
         .append('table')
       var thead = table.append('thead')
       var tbody = table.append('tbody')
-      thead.append('tr')
-        .selectAll('th')
-        .data(columns)
-        .enter()
-        .append('th')
-        .text(function (d) { return d })
+      
       var rows = tbody.selectAll('tr')
         .data(data.filter(function (d) {
           if (d.country == (countryById[focusedCountry.id]).toLowerCase()) {
@@ -127,6 +122,13 @@ function ready(error, world, countryData) {
         )
         .enter()
         .append('tr')
+    if(rows.selectAll("td").length>0){
+      thead.append('tr')
+        .selectAll('th')
+        .data(columns)
+        .enter()
+        .append('th')
+        .text(function (d) { return d })
       var cells = rows.selectAll('td')
         .data(function (row) {
           return columns.map(function (column) {
@@ -140,20 +142,27 @@ function ready(error, world, countryData) {
         .append('td')
         .text(function (d) { return d.value })
       return table;
+    }else{
+        console.log(rows.selectAll("td").length);
+        return;
     }
+};
+    
     d3.csv('https://raw.githubusercontent.com/cmcourville/04-Remix/master/country_song_data.csv?token=AHXQFOQDJJC55L5S4T2POJ3AN4HYY', function (data) {
       var columns = ['title', 'artist', 'country']
       tabulate(data, columns)
-    })
+    });
     function country(cnt, sel) {
       for (var i = 0, l = cnt.length; i < l; i++) {
         if (cnt[i].id == sel.value) { return cnt[i]; }
       }
     };
-  };
+ 
   
   d3.select("select").on("change", function () {
     onChange(this);
   });
   
   };
+
+}
