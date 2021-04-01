@@ -129,14 +129,23 @@ function ready(error, world, countryData) {
         .enter()
         .append('th')
         .text(function (d) { return d })
+        var ctr = 0;
       var cells = rows.selectAll('td')
         .data(function (row) {
+          
+          if(ctr<40){
           return columns.map(function (column) {
+            ctr+=1;
+            console.log(ctr);
             return {
               column: column,
               value: row[column]
             }
+            
           })
+        }else{
+          return table;
+        }
         })
         .enter()
         .append('td')
@@ -146,11 +155,12 @@ function ready(error, world, countryData) {
         console.log(rows.selectAll("td").length);
         return;
     }
-};
+    
+  };
     
     d3.csv('https://raw.githubusercontent.com/cmcourville/04-Remix/master/country_song_data.csv?token=AHXQFOQDJJC55L5S4T2POJ3AN4HYY', function (data) {
-      var columns = ['title', 'artist', 'country']
-      tabulate(data, columns)
+      var columns = ['title', 'artist']
+      tabulate(data, columns);
     });
     function country(cnt, sel) {
       for (var i = 0, l = cnt.length; i < l; i++) {
