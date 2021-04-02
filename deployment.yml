@@ -1,40 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: world-in-review
+    name: corrin-demo
     labels:
-        app: world-in-review
+        app: corrin-demo
 spec:
     replicas: 2
     selector:
         matchLabels: 
-            app: world-in-review
+            app: corrin-demo
     template:
         metadata:
             labels:
-                app: world-in-review
+                app: corrin-demo
         spec:
             containers:
-            -   name: world-in-review
-                image: cmcourvill/demo2
+            -   name: corrin-demo
+                image: cmcourvill/corrin-demo1
                 ports:
-                -   containerPort: 80 
+                -   containerPort: 3000 
                 resources:
                     limits:
                         memory: '128Mi'
                         cpu: '200m'
                 livenessProbe:
                     httpGet:
-                        path: /views/index.html
-                        port: 80
+                        path: /
+                        port: 3000
                     initialDelaySeconds: 15
                     timeoutSeconds: 2
                     periodSeconds: 5
                     failureThreshold: 1
                 readinessProbe:
                     httpGet:
-                        path: /views/index.html
-                        port: 80
+                        path: /
+                        port: 3000
                     initialDelaySeconds: 15
                     periodSeconds: 5
                     failureThreshold: 1
