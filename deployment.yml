@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: world-in-review
+    labels:
+        app: world-in-review
+spec:
+    replicas: 2
+    selector:
+        matchLabels: 
+            app: world-in-review
+    template:
+        metadata:
+            labels:
+                app: world-in-review
+        spec:
+            containers:
+            -   name: world-in-review
+                image: cmcourvill/demo2
+                ports:
+                -   containerPort: 80 
+                resources:
+                    limits:
+                        memory: '128Mi'
+                        cpu: '200m'
+                livenessProbe:
+                    httpGet:
+                        path: /views/index.html
+                        port: 80
+                    initialDelaySeconds: 15
+                    timeoutSeconds: 2
+                    periodSeconds: 5
+                    failureThreshold: 1
+                readinessProbe:
+                    httpGet:
+                        path: /views/index.html
+                        port: 80
+                    initialDelaySeconds: 15
+                    periodSeconds: 5
+                    failureThreshold: 1
